@@ -1,6 +1,10 @@
 <template>
   <div>
-    <el-page-header @back="goBack"></el-page-header>
+    <el-page-header @back="goBack">
+      <div slot="content" @click="goAnimate1">
+        <el-link href="javascript:;" type="info">前往 Animate1 原頁面</el-link>
+      </div>
+    </el-page-header>
     <el-timeline class="margin-bt-30">
       <el-timeline-item
         v-for="item in bangumiList"
@@ -136,6 +140,18 @@ export default {
         });
       } else {
         window.open(url);
+      }
+    },
+    goAnimate1() {
+      const url = `https://anime1.me/?cat=${this.bangumiId}`;
+      this.$g_logEvent('Click', `前往 ${this.title} Animate1頁面`, 'Link Button');
+      if (window.liff.isInClient()) {
+        window.liff.openWindow({
+          url,
+          external: true,
+        });
+      } else {
+        window.location.href = url;
       }
     },
   },

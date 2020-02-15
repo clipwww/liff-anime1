@@ -1,11 +1,6 @@
 <template>
   <div id="app">
-    <div
-      class="loader loader-default"
-      :class="{ 'is-active': isLoading }"
-      data-half
-      data-text="正在努力加載中..."
-    ></div>
+    <div class="loader loader-default" :class="{ 'is-active': isLoading }" data-half></div>
     <div class="wrapper">
       <div class="main-content">
         <transition name="fade" mode="out-in">
@@ -22,7 +17,7 @@
         placement="left"
         :disabled="!isLoggedIn"
       >
-        <el-avatar size="large" :src="profile.pictureUrl"></el-avatar>
+        <el-avatar :src="profile.pictureUrl"></el-avatar>
       </el-tooltip>
     </div>
     <el-dialog
