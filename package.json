@@ -7,7 +7,7 @@
     "build-ts": "node_modules/typescript/bin/tsc --project ./server",
     "nodemon-exec": "npm run build-ts && npm run serve",
     "dev": "node_modules/nodemon/bin/nodemon.js",
-    "start": "node ./.build/index.js",
+    "start": "vue-cli-service serve",
     "serve": "vue-cli-service serve",
     "build": "npm run build-ts && vue-cli-service build",
     "heroku-postbuild": "npm run build"
