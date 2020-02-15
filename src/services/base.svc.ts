@@ -3,6 +3,8 @@ import { Notification, Loading } from 'element-ui';
 import { ElLoadingComponent } from 'element-ui/types/loading';
 import { ResultVM, ResultCode } from '@/view-models/result.vm'
 
+import store from '@/store';
+
 export interface CustomAxiosRequestConfig extends AxiosRequestConfig {
   ignoreErrorMessage?: boolean;
   ignoreLoader?: boolean;
@@ -16,20 +18,19 @@ export interface CustomAxiosResponse extends AxiosResponse {
 export const createAxiosInstance = () => {
   console.log('createAxiosInstance')
   const axiosInstace = axios.create({
-    timeout: 20000,
+    timeout: 60000,
     headers: {
       'Content-Type': 'application/json',
 
     },
   })
 
-  let loadingInstance: ElLoadingComponent;
 
   axiosInstace.interceptors.request.use((config: CustomAxiosRequestConfig) => {
     const { ignoreErrorMessage = false, ignoreLoader = false } = config;
 
     if (!ignoreLoader) {
-      loadingInstance = Loading.service({ fullscreen: true, text: '努力加載中', background: `rgba(0,0,0,0.7)` });
+      store.dispatch('updateLoading', true);
     }
 
     return config;
@@ -40,7 +41,7 @@ export const createAxiosInstance = () => {
     const { success, resultCode, resultMessage } = response.data as ResultVM;
 
     if (!ignoreLoader) {
-      loadingInstance.close();
+      store.dispatch('updateLoading', false);
     }
 
     if (!success && !ignoreErrorMessage) {
@@ -54,7 +55,7 @@ export const createAxiosInstance = () => {
 
     return response;
   }, (err) => {
-    loadingInstance.close();
+    store.dispatch('updateLoading', false);
     Notification.error({
       title: 'Oops',
       message: err.message,

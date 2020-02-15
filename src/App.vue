@@ -1,17 +1,25 @@
 <template>
   <div id="app">
+    <div
+      class="loader loader-default"
+      :class="{ 'is-active': isLoading }"
+      data-half
+      data-text="正在努力加載中..."
+    ></div>
     <div class="wrapper">
       <div class="main-content">
         <transition name="fade" mode="out-in">
           <router-view />
         </transition>
       </div>
-      <footer>版權沒有XD © 2020 clipwww.github.io</footer>
+      <footer>版權沒有🤔 © 2020 clipwww.github.io</footer>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   metaInfo() {
     return {
@@ -21,6 +29,11 @@ export default {
   },
   data() {
     return {};
+  },
+  computed: {
+    ...mapGetters({
+      isLoading: 'isLoading',
+    }),
   },
 };
 </script>
@@ -43,7 +56,10 @@ export default {
 footer {
   font-size: 12px;
   text-align: center;
-  padding: 4px 0;
+  padding: 0;
   background-color: #fff;
+  border-top: 1px solid #ddd;
+  line-height: 25px;
+  white-space: nowrap;
 }
 </style>
