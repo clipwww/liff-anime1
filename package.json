@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild-ts": "rm -rf .build && mkdir .build",
     "build-ts": "node_modules/typescript/bin/tsc --project ./server",
     "nodemon-exec": "npm run build-ts && npm run serve",
     "dev": "node_modules/nodemon/bin/nodemon.js",
-    "start": "vue-cli-service serve",
+    "start": "node ./dist/index.js",
     "serve": "vue-cli-service serve",
-    "build": "npm run build-ts && vue-cli-service build",
+    "build": "vue-cli-service build && npm run build-ts",
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {

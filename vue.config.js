@@ -4,7 +4,7 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
     before(app) {
-      const server = require("./.build").default;
+      const server = require("./dist").default;
       app.use(server);
     },
   },

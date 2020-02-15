@@ -16,7 +16,7 @@
     "rootDirs": [
       "../server/"
     ],
-    "outDir": "../.build",
+    "outDir": "../dist",
     "paths": {}
   },
   "include": [

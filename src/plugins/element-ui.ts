@@ -1,17 +1,22 @@
 import Vue from 'vue';
 import moment from 'moment';
-import ElementUI, { DatePicker } from 'element-ui';
+import { Notification, Input, Card, Button, Divider, Timeline, TimelineItem, Collapse, CollapseItem, DatePicker, PageHeader, Tag } from 'element-ui';
 
-// @ts-ignore
-import zhTW from 'element-ui/lib/locale/lang/zh-TW';
+Vue.component(Notification.name, Notification);
+Vue.component(Input.name, Input);
+Vue.component(Card.name, Card);
+Vue.component(Button.name, Button);
+Vue.component(Divider.name, Divider);
+Vue.component(Timeline.name, Timeline);
+Vue.component(TimelineItem.name, TimelineItem);
+Vue.component(Collapse.name, Collapse);
+Vue.component(CollapseItem.name, CollapseItem);
+Vue.component(PageHeader.name, PageHeader);
+Vue.component(Tag.name, Tag);
 
 console.info('init plugins: element-ui.ts');
 
-Vue.use(ElementUI, {
-  locale: zhTW,
-  size: 'medium',
-});
-
+Vue.prototype.$notify = Notification;
 // MessageBox.setDefaults()
 
 export const DIALOG_DEFAULT_PROPS = {
