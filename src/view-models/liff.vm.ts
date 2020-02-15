@@ -79,6 +79,8 @@ export interface LineContext {
 export interface LineProfile {
   userId: string;
   displayName: string;
+  pictureUrl: string;
+  statusMessage: string;
 }
 
 export interface DecodedIDToken {

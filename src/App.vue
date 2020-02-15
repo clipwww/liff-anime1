@@ -14,26 +14,71 @@
       </div>
       <footer>版權沒有🤔 © 2020 clipwww.github.io</footer>
     </div>
+    <div class="profile">
+      <el-tooltip
+        class="item"
+        effect="dark"
+        :content="`Hi, ${profile.displayName}`"
+        placement="left"
+        :disabled="!isLoggedIn"
+      >
+        <el-avatar size="large" :src="profile.pictureUrl" @click="onClickAvatar"></el-avatar>
+      </el-tooltip>
+    </div>
+    <el-dialog
+      v-bind="DIALOG_DEFAULT_PROPS"
+      :visible.sync="showLoginDialog"
+      title="您尚未登入唷"
+      width="95%"
+    >
+      <el-button type="success" @click="lineLogin">現在就去登入Line</el-button>
+      <el-button type="danger" @click="showLoginDialog = false">晚點再說</el-button>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 
+import { DIALOG_DEFAULT_PROPS } from '@/plugins/element-ui';
+
 export default {
   metaInfo() {
     return {
       title: this.$route.meta.label,
-      titleTemplate: '%s | ( ͡° ͜ʖ ͡°)',
+      titleTemplate: '%s  |  ( ͡° ͜ʖ ͡°)',
     };
   },
   data() {
-    return {};
+    return {
+      DIALOG_DEFAULT_PROPS,
+      showLoginDialog: false,
+    };
   },
   computed: {
     ...mapGetters({
       isLoading: 'isLoading',
+      isLoggedIn: 'isLoggedIn',
+      profile: 'profile',
     }),
+  },
+  mounted() {
+    if (!this.isLoggedIn) {
+      this.showLoginDialog = true;
+    }
+  },
+  methods: {
+    lineLogin() {
+      window.liff.login({
+        redirectUri: `${window.location.origin}${this.$route.path}`,
+      });
+    },
+    onClickAvatar() {
+      if (this.isLoggedIn) {
+      } else {
+        this.showLoginDialog = true;
+      }
+    },
   },
 };
 </script>
@@ -61,5 +106,12 @@ footer {
   border-top: 1px solid #ddd;
   line-height: 25px;
   white-space: nowrap;
+}
+
+.profile {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 99;
 }
 </style>

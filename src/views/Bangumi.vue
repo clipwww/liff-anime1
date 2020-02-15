@@ -17,7 +17,7 @@
             class="is-block margin-b-10"
             type="primary"
             size="mini"
-            @click="downloadMp4(item.type === 'm3u8' ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}` :  item.mp4Url)"
+            @click="downloadMp4(item.type === 'm3u8' ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}&name=${item.name}` :  item.mp4Url)"
           >下載</el-button>
           <el-collapse>
             <el-collapse-item title="線上看" name="1">

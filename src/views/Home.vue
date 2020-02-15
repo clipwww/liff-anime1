@@ -2,6 +2,14 @@
   <div class="home__wrapper">
     <div class="home__search">
       <el-input v-model="keyword" suffix-icon="el-icon-search" placeholder="請輸入關鍵字搜尋"></el-input>
+      <el-switch
+        class="margin-t-10"
+        v-if="isLoggedIn"
+        v-model="profile.onlyShowFavorite"
+        active-color="#cc2f2d"
+        active-text="只顯示老子愛的"
+      ></el-switch>
+      <div class="tip" v-else>登入就可以使用「我的最愛」囉</div>
     </div>
     <div class="home__list">
       <RecycleScroller
@@ -13,7 +21,11 @@
       >
         <el-card shadow="none" :class="{ 'is-odd': index % 2 === 0, 'is-active': active }">
           <div class="home__card">
-            <div class="flag">
+            <div
+              class="flag"
+              :class="{ 'is-favorite': isFavorite(item.id) }"
+              @click="toggleFavorite(item)"
+            >
               <i class="el-icon-s-flag"></i>
             </div>
             <div class="name">
@@ -35,15 +47,15 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 import { RecycleScroller } from 'vue-virtual-scroller';
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css';
 import moment from 'moment';
 import _isEqualWith from 'lodash/isEqualWith';
+import _get from 'lodash/get';
 
-import { firebaseInstance } from '@/plugins/firebase';
+import { liffAni1Ref } from '@/plugins/firebase';
 import { ani1SVC } from '@/services';
-
-const liffAni1Ref = firebaseInstance.database().ref('/liff-animate1/');
 
 export default {
   components: {
@@ -56,14 +68,36 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      isLoggedIn: 'isLoggedIn',
+      profile: 'profile',
+    }),
     filterItems() {
-      return this.items.filter(item => (this.keyword ? item.name.includes(this.keyword) : true));
+      return this.items
+        .filter(item => {
+          if (!this.isLoggedIn) {
+            return true;
+          }
+          return this.profile.onlyShowFavorite ? this.isFavorite(item.id) : true;
+        })
+        .filter(item => (this.keyword ? item.name.includes(this.keyword) : true));
+    },
+  },
+  watch: {
+    async 'profile.onlyShowFavorite'(bool) {
+      await liffAni1Ref.child(`user-${this.profile.userId}`).set({
+        ...this.profile,
+        onlyShowFavorite: bool,
+      });
     },
   },
   created() {
     this.getAni1List();
   },
   methods: {
+    ...mapActions({
+      updateProfile: 'updateProfile',
+    }),
     async getAni1List() {
       let firebaseItems = [];
       await liffAni1Ref.child('list').once('value', snapshot => {
@@ -96,6 +130,32 @@ export default {
         });
       }
     },
+    isFavorite(id) {
+      if (!this.isLoggedIn) {
+        return false;
+      }
+      return _get(this.profile, 'favoriteList', []).some(item => item.id === id);
+    },
+    async toggleFavorite(item) {
+      if (!this.isLoggedIn) {
+        return;
+      }
+      const isFavorite = this.isFavorite(item.id);
+      let nowArr = _get(this.profile, 'favoriteList', []);
+      nowArr = Array.isArray(nowArr) ? nowArr : [];
+
+      await liffAni1Ref.child(`user-${this.profile.userId}`).set({
+        ...this.profile,
+        favoriteList: this.isFavorite(item.id) ? nowArr.filter(f => f.id !== item.id) : nowArr.concat(item),
+      });
+
+      await this.updateProfile();
+      this.$notify({
+        type: 'success',
+        title: isFavorite ? '已從我的最愛中刪除' : '已加入我的最愛',
+        message: '',
+      });
+    },
   },
 };
 </script>
@@ -109,9 +169,11 @@ export default {
   &__list {
     position: fixed;
     top: 0px;
-    left: 0;
-    right: 0;
     bottom: 0;
+    left: 50%;
+    max-width: 768px;
+    width: 100%;
+    transform: translate(-50%);
     z-index: 1;
     padding-bottom: 26px;
   }
@@ -119,11 +181,20 @@ export default {
   &__search {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    max-width: 768px;
+    width: 100%;
+    height: 90px;
+    transform: translate(-50%);
     padding: 10px;
     z-index: 2;
     background-color: #000;
+    .tip {
+      color: #fff;
+      margin-top: 10px;
+      padding-left: 3px;
+      font-size: 12px;
+    }
   }
 
   &__card {
@@ -135,6 +206,10 @@ export default {
       width: 20px;
       margin-right: 10px;
       color: #ddd;
+
+      &.is-favorite {
+        color: $re;
+      }
     }
     .name {
       font-size: 14px;
@@ -164,7 +239,15 @@ export default {
   }
   .scroller {
     height: 100%;
-    padding: 71px 15px 0;
+    padding: 105px 15px 0;
+  }
+  .el-switch {
+    &__label {
+      color: fade-out(#fff, 0.5);
+      &.is-active {
+        color: #fff;
+      }
+    }
   }
 }
 </style>

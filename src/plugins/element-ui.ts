@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import moment from 'moment';
-import { Notification, Input, Card, Button, Divider, Timeline, TimelineItem, Collapse, CollapseItem, DatePicker, PageHeader, Tag } from 'element-ui';
+import { Notification, Input, Card, Button, Divider, Timeline, TimelineItem, Collapse, CollapseItem, DatePicker, PageHeader, Tag, Dialog, Avatar, Tooltip, Switch } from 'element-ui';
 
 Vue.component(Notification.name, Notification);
 Vue.component(Input.name, Input);
@@ -13,6 +13,10 @@ Vue.component(Collapse.name, Collapse);
 Vue.component(CollapseItem.name, CollapseItem);
 Vue.component(PageHeader.name, PageHeader);
 Vue.component(Tag.name, Tag);
+Vue.component(Dialog.name, Dialog);
+Vue.component(Avatar.name, Avatar);
+Vue.component(Tooltip.name, Tooltip);
+Vue.component(Switch.name, Switch);
 
 console.info('init plugins: element-ui.ts');
 

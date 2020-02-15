@@ -8,7 +8,7 @@ import '@/plugins/element-ui';
 import '@/plugins/register-components';
 import '@/plugins/vue-filter';
 import '@/plugins/vue-meta';
-// import '@/router/guards';
+import '@/router/guards';
 import { installLIFF } from '@/plugins/liff'
 
 import '@/assets/scss/index.scss';
