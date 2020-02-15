@@ -9,12 +9,12 @@
     <div class="wrapper">
       <div class="main-content">
         <transition name="fade" mode="out-in">
-          <router-view />
+          <router-view @onLogin="showLoginDialog = true" />
         </transition>
       </div>
       <footer>版權沒有🤔 © 2020 clipwww.github.io</footer>
     </div>
-    <div class="profile">
+    <div class="profile" @click="onClickAvatar">
       <el-tooltip
         class="item"
         effect="dark"
@@ -22,7 +22,7 @@
         placement="left"
         :disabled="!isLoggedIn"
       >
-        <el-avatar size="large" :src="profile.pictureUrl" @click="onClickAvatar"></el-avatar>
+        <el-avatar size="large" :src="profile.pictureUrl"></el-avatar>
       </el-tooltip>
     </div>
     <el-dialog
@@ -69,11 +69,13 @@ export default {
   },
   methods: {
     lineLogin() {
+      this.$g_logEvent('Click', '登入', 'Login Button');
       window.liff.login({
         redirectUri: `${window.location.origin}${this.$route.path}`,
       });
     },
     onClickAvatar() {
+      this.$g_logEvent('Click', this.isLoggedIn ? `Hi, ${this.profile.displayName}` : '登入', 'Avatar');
       if (this.isLoggedIn) {
       } else {
         this.showLoginDialog = true;

@@ -1,17 +1,25 @@
 <template>
   <div class="home__wrapper">
     <div class="home__search">
-      <el-input v-model="keyword" suffix-icon="el-icon-search" placeholder="請輸入關鍵字搜尋"></el-input>
-      <el-switch
-        class="margin-t-10"
-        v-if="isLoggedIn"
-        v-model="profile.onlyShowFavorite"
-        active-color="#cc2f2d"
-        active-text="只顯示老子愛的"
-      ></el-switch>
-      <div class="tip" v-else>登入就可以使用「我的最愛」囉</div>
+      <el-input
+        v-model="keyword"
+        suffix-icon="el-icon-search"
+        placeholder="請輸入關鍵字搜尋"
+        @blur="$g_logEvent('Blur', `搜尋 ${keyword}`, 'Search Input')"
+        @keyup.native.enter="$g_logEvent('Keyup Enter', `搜尋 ${keyword}`, 'Search Input')"
+      ></el-input>
+      <div class="flex-between margin-t-10">
+        <el-switch
+          v-if="isLoggedIn"
+          v-model="profile.onlyShowFavorite"
+          active-color="#cc2f2d"
+          active-text="只顯示老子愛的"
+          @click="$g_logEvent('Click', '切換列表顯示', 'Switch')"
+        ></el-switch>
+        <div class="tip" v-else>登入就可以使用「我的最愛」囉</div>
+      </div>
     </div>
-    <div class="home__list">
+    <div class="home__list" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.7)">
       <RecycleScroller
         class="scroller"
         :items="filterItems"
@@ -36,6 +44,7 @@
               class="more"
               tag="span"
               :to="{ name: 'Bangumi', params: { id: item.id }, query: { name: item.name } }"
+              @click="$g_logEvent('Click', `前往 ${item.name}`, 'Bangumi More')"
             >
               <i class="el-icon-more"></i>
             </router-link>
@@ -65,6 +74,7 @@ export default {
     return {
       keyword: '',
       items: [],
+      isLoading: false,
     };
   },
   computed: {
@@ -138,23 +148,36 @@ export default {
     },
     async toggleFavorite(item) {
       if (!this.isLoggedIn) {
+        this.$emit('onLogin');
+        this.$g_logEvent('Click', '需要登入', 'Favorite Button');
         return;
       }
-      const isFavorite = this.isFavorite(item.id);
-      let nowArr = _get(this.profile, 'favoriteList', []);
-      nowArr = Array.isArray(nowArr) ? nowArr : [];
 
-      await liffAni1Ref.child(`user-${this.profile.userId}`).set({
-        ...this.profile,
-        favoriteList: this.isFavorite(item.id) ? nowArr.filter(f => f.id !== item.id) : nowArr.concat(item),
-      });
+      try {
+        const isFavorite = this.isFavorite(item.id);
 
-      await this.updateProfile();
-      this.$notify({
-        type: 'success',
-        title: isFavorite ? '已從我的最愛中刪除' : '已加入我的最愛',
-        message: '',
-      });
+        let nowArr = _get(this.profile, 'favoriteList', []);
+        nowArr = Array.isArray(nowArr) ? nowArr : [];
+
+        this.isLoading = true;
+        await liffAni1Ref.child(`user-${this.profile.userId}`).set({
+          ...this.profile,
+          favoriteList: this.isFavorite(item.id) ? nowArr.filter(f => f.id !== item.id) : nowArr.concat(item),
+        });
+        this.$g_logEvent('Click', (isFavorite ? '移除我的最愛: ' : '加到我的最愛: ') + item.name, 'Favorite Button');
+
+        await this.updateProfile();
+        // this.$notify({
+        //   type: 'success',
+        //   title: isFavorite ? '已從我的最愛中刪除' : '已加入我的最愛',
+        //   message: '',
+        // });
+      } catch (err) {
+        console.log(err);
+        this.$g_logEvent('Error', err.message, '發生錯誤惹');
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 };
@@ -191,7 +214,6 @@ export default {
     background-color: #000;
     .tip {
       color: #fff;
-      margin-top: 10px;
       padding-left: 3px;
       font-size: 12px;
     }

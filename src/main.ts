@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 
+import '@/plugins/vue-analytics';
 import '@/plugins/element-ui';
 import '@/plugins/register-components';
 import '@/plugins/vue-filter';

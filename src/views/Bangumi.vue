@@ -17,10 +17,14 @@
             class="is-block margin-b-10"
             type="primary"
             size="mini"
-            @click="downloadMp4(item.type === 'm3u8' ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}&name=${item.name}` :  item.mp4Url)"
+            @click="downloadMp4(item)"
           >下載</el-button>
           <el-collapse>
-            <el-collapse-item title="線上看" name="1">
+            <el-collapse-item
+              title="線上看"
+              name="1"
+              @click="$g_logEvent('Click', `查閱線上看 ${item.name}`, 'Collapse')"
+            >
               <div>
                 <div v-if="item.type === 'mp4'" class="video-wrapper">
                   <iframe :src="item.iframeSrc"></iframe>
@@ -84,6 +88,7 @@ export default {
   },
   methods: {
     goBack() {
+      this.$g_logEvent('Click', '返回', 'Back Button');
       this.$router.replace({ name: 'Home' });
     },
     async getBangumiList() {
@@ -118,7 +123,12 @@ export default {
         });
       }
     },
-    downloadMp4(url) {
+    downloadMp4(item) {
+      const url =
+        item.type === 'm3u8'
+          ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}&name=${item.name}`
+          : item.mp4Url;
+      this.$g_logEvent('Click', `下載 ${item.name}`, 'Download Button');
       if (window.liff.isInClient()) {
         window.liff.openWindow({
           url,
