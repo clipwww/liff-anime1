@@ -1,0 +1,96 @@
+/* 改变主题色变量 */
+// $--color-primary: #7ac4cd;
+$--color-primary: #5fabc6;
+$--color-success: $success;
+$--color-danger: $error;
+$--color-error: $error;
+$--color-warning: $warning;
+$--color-info: $info;
+
+/* 改变 icon 字体路径变量，必需 */
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";
+
+.el-button {
+  &.is-block {
+    display: block;
+    width: 100%;
+  }
+}
+
+.el-link {
+  font-weight: normal;
+}
+
+
+.re-dialog {
+  max-width: 700px;
+
+  &.is-big {
+    max-width: 1000px;
+  }
+}
+
+.el-dialog {
+  &__wrapper {
+    padding: 0 15px;
+  }
+}
+
+.el-table {
+  // box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  border-radius: 3px;
+
+  &::after, &::before {
+    content: none;
+  }
+
+  th.is-leaf {
+    background-color: $info;
+    font-weight: normal;
+  }
+  thead {
+    color: white;
+  }
+}
+
+.el-pagination {
+  text-align: right;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.el-select, .el-input, .el-autocomplete {
+  &.is-block {
+    width: 100%;
+  }
+}
+
+.el-loading-mask {
+  z-index: $loadingZindex;
+}
+
+.el-radio, .el-checkbox {
+  margin-left: 0;
+  margin-right: 10px;
+
+  & + & {
+    margin-left: 0;
+  }
+
+  &.is-bordered {
+    & + & {
+      margin-left: 0;
+    }
+  }
+}
+
+.el-notification__content {
+  text-align: left;
+}
+
+.el-card {
+  &__header {
+    background-color: rgba(#eee, .3);
+  }
+}
