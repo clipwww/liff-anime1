@@ -40,14 +40,12 @@
               <div>{{ item.name }}</div>
               <span class="little-text">{{ item.description }}</span>
             </div>
-            <router-link
+            <span
               class="more"
-              tag="span"
-              :to="{ name: 'Bangumi', params: { id: item.id }, query: { name: item.name } }"
-              @click="$g_logEvent('Click', `前往 ${item.name}`, 'Bangumi More')"
+              @click="goBangumi(item)"
             >
               <i class="el-icon-more"></i>
-            </router-link>
+            </span>
           </div>
         </el-card>
       </RecycleScroller>
@@ -174,11 +172,15 @@ export default {
         // });
       } catch (err) {
         console.log(err);
-        this.$g_logEvent('Error', err.message, '發生錯誤惹');
+        this.$ga.exception(err.message)
       } finally {
         this.isLoading = false;
       }
     },
+    goBangumi(item) {
+      this.$router.push({ name: 'Bangumi', params: { id: item.id }, query: { name: item.name } })
+      this.$g_logEvent('Click', `前往 ${item.name}`, 'Bangumi More')
+    }
   },
 };
 </script>

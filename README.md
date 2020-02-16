@@ -1,4 +1,4 @@
-# liff-animate1
+# liff-anime1
 
 ## Project setup
 ```

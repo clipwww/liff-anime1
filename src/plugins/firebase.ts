@@ -11,5 +11,5 @@ export const firebaseInstance = firebase.initializeApp({
   appId: "1:1018687191918:web:dccdcdc93aedda045e9f7f"
 });
 
-export const liffAni1Ref = firebaseInstance.database().ref('/liff-animate1/');
+export const liffAni1Ref = firebaseInstance.database().ref('/liff-anime1/');
 

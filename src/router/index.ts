@@ -13,7 +13,7 @@ const routes = [
     name: 'Home',
     component: Home,
     meta: {
-      label: 'Animate1 動畫列表'
+      label: 'Anime1 動畫列表'
     }
   },
   {

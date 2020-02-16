@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-page-header @back="goBack">
-      <div slot="content" @click="goAnimate1">
-        <el-link href="javascript:;" type="info">前往 Animate1 原頁面</el-link>
+      <div slot="content" @click="goAnime1">
+        <el-link href="javascript:;" type="info">前往 Anime1 原頁面</el-link>
       </div>
     </el-page-header>
     <el-timeline class="margin-bt-30">
@@ -64,7 +64,7 @@ import { TABLE_DEFAULT_PROPS } from '@/plugins/element-ui';
 import { firebaseInstance } from '@/plugins/firebase';
 import { ani1SVC } from '@/services';
 
-const liffAni1Ref = firebaseInstance.database().ref('/liff-animate1/');
+const liffAni1Ref = firebaseInstance.database().ref('/liff-anime1/');
 
 export default {
   metaInfo() {
@@ -129,26 +129,26 @@ export default {
     },
     downloadMp4(item) {
       const url =
-        item.type === 'm3u8'
+        !!item.m3u8Url
           ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}&name=${item.name}`
           : item.mp4Url;
       this.$g_logEvent('Click', `下載 ${item.name}`, 'Download Button');
       if (window.liff.isInClient()) {
         window.liff.openWindow({
           url,
-          external: true,
+          external: false,
         });
       } else {
         window.open(url);
       }
     },
-    goAnimate1() {
+    goAnime1() {
       const url = `https://anime1.me/?cat=${this.bangumiId}`;
-      this.$g_logEvent('Click', `前往 ${this.title} Animate1頁面`, 'Link Button');
+      this.$g_logEvent('Click', `前往 ${this.title} Anime1頁面`, 'Link Button');
       if (window.liff.isInClient()) {
         window.liff.openWindow({
           url,
-          external: true,
+          external: false,
         });
       } else {
         window.location.href = url;

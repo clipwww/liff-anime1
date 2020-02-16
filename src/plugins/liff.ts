@@ -1,4 +1,4 @@
-import { Notification, Message } from 'element-ui';
+import { Notification } from 'element-ui';
 
 import { LiffError } from '@/view-models/liff.vm';
 
@@ -57,7 +57,11 @@ export const scanCode = async () => {
     const ret = await liff.scanCode();
     return ret;
   } catch (err) {
-    Message.error(err.message);
+    Notification({
+      type: 'error',
+      title: err.message,
+      message: ''
+    });
     return;
   }
 }

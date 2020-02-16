@@ -34,6 +34,9 @@ export const createAxiosInstance = () => {
     }
 
     return config;
+  }, (err) => {
+    console.error(err);
+    store.dispatch('updateLoading', false);
   })
 
   axiosInstace.interceptors.response.use((response: CustomAxiosResponse) => {
@@ -55,6 +58,7 @@ export const createAxiosInstance = () => {
 
     return response;
   }, (err) => {
+    console.error(err);
     store.dispatch('updateLoading', false);
     Notification.error({
       title: 'Oops',

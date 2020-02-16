@@ -14,7 +14,6 @@ import { installLIFF } from '@/plugins/liff'
 
 import '@/assets/scss/index.scss';
 
-
 Vue.config.productionTip = false;
 
 (async () => {

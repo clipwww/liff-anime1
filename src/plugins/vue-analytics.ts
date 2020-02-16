@@ -5,13 +5,19 @@ import router from '@/router';
 Vue.use(VueAnalytics, {
   id: 'UA-93335284-4',
   router,
+  autoTracking: {
+    exception: true,
+    exceptionLogs: false
+  }
 });
+
+export function logEvent(eventCategory: string, eventAction: string, eventLabel: string): void {
+  Vue.$ga.event(eventCategory, eventAction, eventLabel);
+}
 
 
 Vue.mixin({
   methods: {
-    $g_logEvent(eventCategory: string, eventAction: string, eventLabel: string): void {
-      this.$ga.event(eventCategory, eventAction, eventLabel);
-    },
+    $g_logEvent: logEvent,
   },
 });
