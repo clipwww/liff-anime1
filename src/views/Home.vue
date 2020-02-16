@@ -34,7 +34,7 @@
               :class="{ 'is-favorite': isFavorite(item.id) }"
               @click="toggleFavorite(item)"
             >
-              <i class="el-icon-s-flag"></i>
+              <i :class="isFavorite(item.id) ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
             </div>
             <div class="name">
               <div>{{ item.name }}</div>
@@ -189,31 +189,20 @@ export default {
 .home {
   &__wrapper {
     position: relative;
+    display: flex;
+    flex-direction: column;
   }
 
   &__list {
-    position: fixed;
-    top: 0px;
-    bottom: 0;
-    left: 50%;
-    max-width: 768px;
-    width: 100%;
-    transform: translate(-50%);
-    z-index: 1;
-    padding-bottom: 26px;
+    padding: 10px 10px 0;
+    flex: 1;
+    height: calc(100vh - 116px);
   }
 
   &__search {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    max-width: 768px;
-    width: 100%;
-    height: 90px;
-    transform: translate(-50%);
     padding: 10px;
-    z-index: 2;
     background-color: #000;
+    height: 90px;
     .tip {
       color: #fff;
       padding-left: 3px;
@@ -232,7 +221,7 @@ export default {
       color: #ddd;
 
       &.is-favorite {
-        color: $re;
+        color: $warning;
       }
     }
     .name {
@@ -263,7 +252,6 @@ export default {
   }
   .scroller {
     height: 100%;
-    padding: 105px 15px 0;
   }
   .el-switch {
     &__label {

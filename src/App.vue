@@ -92,7 +92,6 @@ export default {
 
 .main-content {
   flex: 1;
-  padding: 15px;
 }
 
 footer {

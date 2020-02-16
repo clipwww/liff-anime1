@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bangumi">
     <el-page-header @back="goBack">
       <div slot="content" @click="goAnime1">
         <el-link href="javascript:;" type="info">前往 Anime1 原頁面</el-link>
@@ -11,6 +11,8 @@
         :key="item.id"
         :timestamp="item.datePublished | formatDate"
         placement="top"
+        size="large"
+        color="#67C23A"
       >
         <el-card>
           <div slot="header">
@@ -33,7 +35,12 @@
                 <div v-if="item.type === 'mp4'" class="video-wrapper">
                   <iframe :src="item.iframeSrc"></iframe>
                 </div>
-                <div v-else>m3u8無法😭</div>
+                <div v-else>
+                  <div>m3u8無法😭</div>
+                  <div @click="goM3u8OriginPage(item)">
+                     <el-link  href="javascript:;" type="info">直接去原頁面看吧</el-link>
+                  </div>
+                </div>
               </div>
             </el-collapse-item>
           </el-collapse>
@@ -154,9 +161,32 @@ export default {
         window.location.href = url;
       }
     },
+    goM3u8OriginPage(item) {
+      const url = item.iframeSrc;
+      this.$g_logEvent('Click', `前往 ${item.name} Anime1 播放器頁面`, 'Link Button');
+      if (window.liff.isInClient()) {
+        window.liff.openWindow({
+          url,
+          external: false,
+        });
+      } else {
+        window.location.href = url;
+      }
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
+.bangumi {
+  padding: 10px;
+}
+::v-deep {
+  .el-timeline-item__tail {
+    border-color: #67C23A;
+  }
+  .el-timeline-item__timestamp {
+    color: #666;
+  }
+}
 </style>
