@@ -137,7 +137,7 @@ export default {
     downloadMp4(item) {
       const url =
         !!item.m3u8Url
-          ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}&name=${decodeURIComponent(item.name)}`
+          ? `https://clipwww-nuxt-express-project.herokuapp.com/api/anime1/download/${item.type}?url=${item.m3u8Url}&name=${decodeURIComponent(`${item.id}-${+new Date()}`)}`
           : item.mp4Url;
       this.$g_logEvent('Click', `下載 ${item.name}`, 'Download Button');
       if (window.liff.isInClient()) {
