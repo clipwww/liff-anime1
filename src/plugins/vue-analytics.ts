@@ -13,7 +13,7 @@ Vue.use(VueAnalytics, {
 
 export function logEvent(eventCategory: string, eventAction: string, eventLabel: string): void {
   //@ts-ignore
-  Vue.$ga.event(eventCategory, eventAction, eventLabel);
+  (Vue.$ga as VueAnalytics).event(eventCategory, eventAction, eventLabel);
 }
 
 

@@ -1,6 +1,13 @@
 import Vue from 'vue';
 import moment from 'moment';
-import { Notification, Input, Card, Button, Divider, Timeline, TimelineItem, Collapse, CollapseItem, DatePicker, PageHeader, Tag, Dialog, Avatar, Tooltip, Switch, Loading, Link } from 'element-ui';
+import {
+  Notification, Input, Card, Button,
+  Divider, Timeline, TimelineItem, Collapse,
+  CollapseItem, DatePicker, PageHeader, Tag,
+  Dialog, Avatar, Tooltip, Switch,
+  Loading, Link, Drawer, Menu,
+  MenuItem, Table, TableColumn, InfiniteScroll
+} from 'element-ui';
 
 Vue.component(Notification.name, Notification);
 Vue.component(Input.name, Input);
@@ -18,8 +25,14 @@ Vue.component(Avatar.name, Avatar);
 Vue.component(Tooltip.name, Tooltip);
 Vue.component(Switch.name, Switch);
 Vue.component(Link.name, Link);
+Vue.component(Drawer.name, Drawer);
+Vue.component(Menu.name, Menu);
+Vue.component(MenuItem.name, MenuItem);
+Vue.component(Table.name, Table);
+Vue.component(TableColumn.name, TableColumn);
 
 Vue.use(Loading.directive);
+Vue.use(InfiniteScroll);
 
 console.info('init plugins: element-ui.ts');
 

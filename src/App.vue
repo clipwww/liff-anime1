@@ -59,7 +59,7 @@ export default {
   },
   mounted() {
     if (!this.isLoggedIn) {
-      this.showLoginDialog = true;
+      // this.showLoginDialog = true;
     }
   },
   methods: {
@@ -72,6 +72,9 @@ export default {
     onClickAvatar() {
       this.$g_logEvent('Click', this.isLoggedIn ? `Hi, ${this.profile.displayName}` : '登入', 'Avatar');
       if (this.isLoggedIn) {
+        this.$router.push({ name: 'Admin' }).catch(err => {
+          console.log('🚀');
+        });
       } else {
         this.showLoginDialog = true;
       }

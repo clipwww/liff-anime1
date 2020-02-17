@@ -6,7 +6,14 @@ import { LineProfile } from '@/view-models/liff.vm';
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+export interface RootState {
+  isLoading: boolean;
+  isLoggedIn: boolean;
+  profile: LineProfile | null;
+
+}
+
+export default new Vuex.Store<RootState>({
   state: {
     isLoading: false,
     isLoggedIn: false,
