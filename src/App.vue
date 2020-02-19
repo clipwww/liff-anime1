@@ -25,6 +25,7 @@
       :visible.sync="showLoginDialog"
       title="您尚未登入唷"
       width="95%"
+      @close="$g_logEvent('Close', '關閉登入視窗', 'Close Login Dialog')"
     >
       <el-button type="success" @click="lineLogin">現在就去登入Line</el-button>
       <el-button type="danger" @click="showLoginDialog = false">晚點再說</el-button>
@@ -59,7 +60,7 @@ export default {
   },
   mounted() {
     if (!this.isLoggedIn) {
-      // this.showLoginDialog = true;
+      this.showLoginDialog = true;
     }
   },
   methods: {
