@@ -12,8 +12,12 @@ Vue.use(VueAnalytics, {
 });
 
 export function logEvent(eventCategory: string, eventAction: string, eventLabel: string): void {
-  //@ts-ignore
-  (Vue.$ga as VueAnalytics).event(eventCategory, eventAction, eventLabel);
+  try {
+    //@ts-ignore
+    (Vue.$ga as VueAnalytics).event(eventCategory, eventAction, eventLabel);
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 

@@ -9,12 +9,10 @@ router.beforeEach(async (to, from, next) => {
     store.dispatch('updateProfile');
   }
 
-  console.log(to.meta.auth)
   if (to.meta.auth) {
-    const profile = store.state.profile;
-    const userId = profile ? profile.userId : '';
+    const userId = store.state?.profile?.userId ?? '';
 
-    if (!isLoggedIn || !profile || userId !== 'U383c9cfcab2d0d16ded2f96ec4337962') {
+    if (!isLoggedIn || userId !== 'U383c9cfcab2d0d16ded2f96ec4337962') {
       return next({ name: 'Home' });
     }
   }

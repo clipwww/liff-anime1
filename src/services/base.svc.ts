@@ -69,10 +69,13 @@ export const createAxiosInstance = () => {
   })
 
   async function request<T>(config: AxiosRequestConfig): Promise<T> {
-    return axiosInstace.request(config).then(res => res.data).catch(err => ({
-      code: ResultCode.clientError,
-      message: err.message
-    }))
+    return axiosInstace.request(config).then(res => res.data).catch(err => {
+      console.error(err);
+      return {
+        code: ResultCode.clientError,
+        message: err.message
+      }
+    })
   }
 
   return {
