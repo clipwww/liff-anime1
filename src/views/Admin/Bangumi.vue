@@ -13,7 +13,7 @@
       </el-table-column>
       <el-table-column type="index" label="#" width="40" align="center"></el-table-column>
       <el-table-column label="標題" prop="title"></el-table-column>
-      <el-table-column label="更新時間">
+      <el-table-column label="最後更新時間">
         <template slot-scope="{ row }">{{ row.dateCreated | formatDate }}</template>
       </el-table-column>
     </el-table>
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import moment from 'moment';
+
 import { liffAni1Ref } from '@/plugins/firebase';
 import { TABLE_DEFAULT_PROPS } from '@/plugins/element-ui';
 
@@ -49,7 +51,7 @@ export default {
             });
           }
         });
-        this.bangumiList = bangumiList;
+        this.bangumiList = bangumiList.sort((a, b) => (moment(a.dateCreated).isBefore(b.dateCreated) ? 1 : -1));
       });
     },
   },

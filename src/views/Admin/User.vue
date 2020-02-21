@@ -3,13 +3,25 @@
     <el-table v-bind="TABLE_DEFAULT_PROPS" :data="users" row-key="userId" empty-text="No data">
       <el-table-column type="expand" width="30">
         <template slot-scope="{ row }">
-          <ul>
+          <ul class="margin-b-30">
             <li
               class="margin-bt-5"
               v-for="(item, index) in row.favoriteList"
               :key="item.id"
             >{{ index + 1 }}. {{ item.name }}</li>
           </ul>
+          <el-card v-if="row.deviceInfo" class="margin-bt-30" header="裝置資訊" shadow="none">
+            <div>
+              OS:
+              <el-tag size="mini" hit>{{ row.deviceInfo.os }}</el-tag>
+            </div>
+            <div class="margin-bt-10">
+              Lang:
+              <el-tag size="mini" hit>{{ row.deviceInfo.lang }}</el-tag>
+            </div>
+            <div>User Agent: {{ row.deviceInfo.userAgent }}</div>
+          </el-card>
+          <div class="little-text">last updated: {{ row.dateUpdated | formatDate }}</div>
         </template>
       </el-table-column>
       <el-table-column type="index" label="#" width="40" align="center"></el-table-column>

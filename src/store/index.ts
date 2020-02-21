@@ -48,6 +48,12 @@ export default new Vuex.Store<RootState>({
       const newProfile = {
         ...ret,
         ...profile,
+        deviceInfo: {
+          os: window.liff.getOS(),
+          lang: window.liff.getLanguage(),
+          userAgent: window.navigator.userAgent
+        },
+        dateUpdated: +new Date()
       };
 
       liffAni1Ref.child(`user-${ret.userId}`).set(newProfile);
