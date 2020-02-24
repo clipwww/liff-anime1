@@ -59,15 +59,15 @@ export default {
     }),
   },
   mounted() {
-    if (!this.isLoggedIn) {
-      this.showLoginDialog = true;
-    }
+    // if (!this.isLoggedIn) {
+    //   this.showLoginDialog = true;
+    // }
   },
   methods: {
     lineLogin() {
       this.$g_logEvent('Click', '登入', 'Login Button');
       window.liff.login({
-        redirectUri: `${window.location.origin}${this.$route.path}`,
+        redirectUri: window.location.href,
       });
     },
     onClickAvatar() {

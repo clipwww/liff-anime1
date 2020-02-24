@@ -1,6 +1,7 @@
 export enum ResultCode {
   success = '200',
   clientError = '400',
+  forbidden = '403',
   serverError = '500',
 }
 
