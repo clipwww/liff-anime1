@@ -2,16 +2,18 @@
   <div class="home__wrapper">
     <div class="home__search">
       <el-input
+        id="js-step3"
         v-model="keyword"
         suffix-icon="el-icon-search"
         placeholder="請輸入關鍵字搜尋"
+        :readonly="isIntroMode"
         @blur="$g_logEvent('Blur', `搜尋 ${keyword}`, 'Search Input')"
         @keyup.native.enter="$g_logEvent('Keyup Enter', `搜尋 ${keyword}`, 'Search Input')"
       ></el-input>
-      <div class="flex-between margin-t-10">
+      <div id="js-step4" class="flex-between margin-t-10">
         <el-switch
-          v-if="isLoggedIn"
-          v-model="profile.onlyShowFavorite"
+          v-if="isLoggedIn || isIntroMode"
+          v-model="onlyShowFavorite"
           active-color="#cc2f2d"
           active-text="只顯示老子愛的"
           @click="$g_logEvent('Click', '切換列表顯示', 'Switch')"
@@ -20,7 +22,24 @@
       </div>
     </div>
     <div class="home__list" v-loading="isLoading" element-loading-background="rgba(0, 0, 0, 0.7)">
+      <template v-if="isIntroMode">
+        <el-card class="margin-b-10" shadow="none" v-for="n in 5" :key="n">
+          <div class="home__card">
+            <div id="js-step2" class="flag" :class="{ 'is-favorite': n <= 1 }">
+              <i :class=" n <= 1 ? 'el-icon-star-on' : 'el-icon-star-off'"></i>
+            </div>
+            <div class="name">
+              <div>少年動畫 第{{ n }}季</div>
+              <span class="little-text">連載中 (第2324353253423948{{ n }}話)</span>
+            </div>
+            <span id="js-step1" class="more">
+              <i class="el-icon-more"></i>
+            </span>
+          </div>
+        </el-card>
+      </template>
       <RecycleScroller
+        v-else
         class="scroller"
         :items="filterItems"
         key-field="id"
@@ -40,15 +59,15 @@
               <div>{{ item.name }}</div>
               <span class="little-text">{{ item.description }}</span>
             </div>
-            <span
-              class="more"
-              @click="goBangumi(item)"
-            >
+            <span class="more" @click="goBangumi(item)">
               <i class="el-icon-more"></i>
             </span>
           </div>
         </el-card>
       </RecycleScroller>
+    </div>
+    <div id="js-step5" class="home__intro" @click="isIntroMode = true">
+      <i class="el-icon-question"></i>
     </div>
   </div>
 </template>
@@ -62,6 +81,7 @@ import _isEqualWith from 'lodash/isEqualWith';
 import _get from 'lodash/get';
 
 import { liffAni1Ref } from '@/plugins/firebase';
+import { createIntro } from '@/plugins/intro';
 import { ani1SVC } from '@/services';
 
 export default {
@@ -73,6 +93,8 @@ export default {
       keyword: '',
       items: [],
       isLoading: false,
+      isIntroMode: window.localStorage.getItem('liff-anime1:home-intro') !== '1',
+      onlyShowFavorite: window.localStorage.getItem(`liff-anime1:onlyShowFavorite`) === 'true',
     };
   },
   computed: {
@@ -86,21 +108,27 @@ export default {
           if (!this.isLoggedIn) {
             return true;
           }
-          return this.profile.onlyShowFavorite ? this.isFavorite(item.id) : true;
+          return this.onlyShowFavorite ? this.isFavorite(item.id) : true;
         })
         .filter(item => (this.keyword ? item.name.includes(this.keyword) : true));
     },
   },
   watch: {
-    async 'profile.onlyShowFavorite'(bool) {
-      await liffAni1Ref.child(`user-${this.profile.userId}`).set({
-        ...this.profile,
-        onlyShowFavorite: bool,
-      });
+    isIntroMode(bool) {
+      if (bool) {
+        this.$g_logEvent('教學', `開啟教學`, `「${this.profile?.displayName ?? '--'}」開啟教學了`);
+        this.initIntro();
+      }
+    },
+    onlyShowFavorite(bool) {
+      window.localStorage.setItem(`liff-anime1:onlyShowFavorite`, bool);
     },
   },
   created() {
     this.getAni1List();
+    if (this.isIntroMode) {
+      this.initIntro();
+    }
   },
   methods: {
     ...mapActions({
@@ -165,22 +193,70 @@ export default {
         this.$g_logEvent('Click', (isFavorite ? '移除我的最愛: ' : '加到我的最愛: ') + item.name, 'Favorite Button');
 
         await this.updateProfile();
-        // this.$notify({
-        //   type: 'success',
-        //   title: isFavorite ? '已從我的最愛中刪除' : '已加入我的最愛',
-        //   message: '',
-        // });
       } catch (err) {
         console.log(err);
-        this.$ga.exception(err.message)
+        this.$ga.exception(err.message);
       } finally {
         this.isLoading = false;
       }
     },
     goBangumi(item) {
-      this.$router.push({ name: 'Bangumi', params: { id: item.id }, query: { name: item.name } })
-      this.$g_logEvent('Click', `前往 ${item.name}`, 'Bangumi More')
-    }
+      this.$router.push({ name: 'Bangumi', params: { id: item.id }, query: { name: item.name } });
+      this.$g_logEvent('Click', `前往 ${item.name}`, 'Bangumi More');
+    },
+    initIntro() {
+      const intro = createIntro();
+      intro.setOptions({
+        steps: [
+          {
+            element: '#js-step1',
+            intro: `
+              <div>點「<i class="el-icon-more"></i>」圖示可進入詳細頁面，下載動畫</div>
+            `,
+          },
+          {
+            element: '#js-step2',
+            intro: `
+              <div>點「<i class="el-icon-star-on"></i>」圖示可將動畫加入我的最愛</div>
+              <span class="little-text">使用此功能必須要登入</span>
+            `,
+          },
+          {
+            element: '#js-step3',
+            intro: `
+              <div>輸入動畫名稱的關鍵字可快速搜尋</div>
+            `,
+          },
+          {
+            element: '#js-step4',
+            intro: `
+              <div>可切換是否只顯示已被加入「我的最愛」之動畫</div>
+              <span class="little-text">使用此功能必須要登入</span>
+            `,
+            highlightClass: 'dark',
+          },
+          {
+            element: '#js-step5',
+            intro: `
+              <div>想再看一次本說明可以點「<i class="el-icon-question"></i>」圖示</div>
+            `,
+          },
+        ],
+      });
+
+      intro.oncomplete(() => {
+        this.$g_logEvent('教學', `教學 Complete`, `「${this.profile?.displayName ?? '--'}」閱讀完教學了`);
+      });
+
+      intro.onexit(() => {
+        this.isIntroMode = false;
+        window.localStorage.setItem('liff-anime1:home-intro', '1');
+      });
+
+      this.$nextTick(() => {
+        intro.start();
+      });
+    },
   },
 };
 </script>
@@ -237,6 +313,15 @@ export default {
       text-align: center;
       margin-left: 5px;
     }
+  }
+
+  &__intro {
+    position: fixed;
+    bottom: 5px;
+    left: 10px;
+    z-index: 99;
+    font-size: 2rem;
+    border-radius: 50%;
   }
 }
 
