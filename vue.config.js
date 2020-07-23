@@ -1,7 +1,7 @@
 const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production' ? '/liff-anime1/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ? '/liff-anime/' : '/',
   devServer: {
     disableHostCheck: true,
     // before(app) {

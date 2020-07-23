@@ -1,10 +1,7 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import { createStore } from 'vuex'
 
-import { liffAni1Ref } from '@/plugins/firebase';
+// import { liffAni1Ref } from '@/plugins/firebase';
 import { LineProfile } from '@/view-models/liff.vm';
-
-Vue.use(Vuex)
 
 export interface RootState {
   isLoading: boolean;
@@ -13,7 +10,7 @@ export interface RootState {
 
 }
 
-export default new Vuex.Store<RootState>({
+export default createStore<RootState>({
   state: {
     isLoading: false,
     isLoggedIn: false,
@@ -41,23 +38,23 @@ export default new Vuex.Store<RootState>({
       if (!state.isLoggedIn) {
         return;
       }
-      const ret = await window.liff.getProfile();
+      const profile = await window.liff.getProfile();
 
-      const snapshot = await liffAni1Ref.child(`user-${ret.userId}`).once('value')
-      const profile = snapshot.val();
-      const newProfile = {
-        ...ret,
-        ...profile,
-        deviceInfo: {
-          os: window.liff.getOS(),
-          lang: window.liff.getLanguage(),
-          userAgent: window.navigator.userAgent
-        },
-        dateUpdated: +new Date()
-      };
+      // const snapshot = await liffAni1Ref.child(`user-${ret.userId}`).once('value')
+      // const profile = snapshot.val();
+      // const newProfile = {
+      //   ...ret,
+      //   ...profile,
+      //   deviceInfo: {
+      //     os: window.liff.getOS(),
+      //     lang: window.liff.getLanguage(),
+      //     userAgent: window.navigator.userAgent
+      //   },
+      //   dateUpdated: +new Date()
+      // };
 
-      liffAni1Ref.child(`user-${ret.userId}`).set(newProfile);
-      commit('UPDATE_PROFILE', newProfile);
+      // liffAni1Ref.child(`user-${ret.userId}`).set(newProfile);
+      commit('UPDATE_PROFILE', profile);
     }
   },
   getters: {
@@ -69,4 +66,4 @@ export default new Vuex.Store<RootState>({
   },
   modules: {
   }
-})
+});

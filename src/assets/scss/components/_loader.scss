@@ -1,5 +1,5 @@
 .loader {
-	color: #888;
+	color: #fff;
 	position: fixed;
 	box-sizing: border-box;
 	left: -9999px;
@@ -17,12 +17,11 @@
 }
 
 .loader.is-active {
-	background-color: transparent;
+	background-color: rgba(0, 0, 0, .85);
 	width: 100%;
 	height: 100%;
 	left: 0;
-	top: 0;
-	pointer-events: none;
+	top: 0
 }
 
 .loader.is-active:after,
@@ -50,11 +49,11 @@
 
 .loader[data-text]:before {
 	position: fixed;
-	left: -55px;
+	left: 0;
 	top: 50%;
 	color: currentColor;
 	font-family: Helvetica, Arial, sans-serif;
-	text-align: right;
+	text-align: center;
 	width: 100%;
 	font-size: 14px
 }
@@ -71,27 +70,49 @@
 	animation: blink 1s linear infinite alternate
 }
 
-.loader-default[data-text]:before {
-	top: 17px;
+@keyframes corners {
+	6% {
+		width: 60px;
+		height: 15px
+	}
+	25% {
+		width: 15px;
+		height: 15px;
+		left: calc(100% - 15px);
+		top: 0
+	}
+	31% {
+		height: 60px
+	}
+	50% {
+		height: 15px;
+		top: calc(100% - 15px);
+		left: calc(100% - 15px)
+	}
+	56% {
+		width: 60px
+	}
+	75% {
+		width: 15px;
+		left: 0;
+		top: calc(100% - 15px)
+	}
+	81% {
+		height: 60px
+	}
 }
 
-.loader-default:after {
+.loader-border[data-text]:before {
+	color: #fff
+}
+
+.loader-border:after {
 	content: "";
-	position: fixed;
-	width: 35px;
-	height: 35px;
-	border: 5px solid #888;
-	border-left-color: transparent;
-	border-radius: 50%;
-	top: 10px;
-	right: 10px;
-	animation: rotation 1s linear infinite
-}
-
-.loader-default[data-half]:after {
-	border-right-color: transparent
-}
-
-.loader-default[data-inverse]:after {
-	animation-direction: reverse
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 15px;
+	height: 15px;
+	background-color: #fff;
+	animation: corners 3s ease both infinite
 }

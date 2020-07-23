@@ -1,6 +1,4 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Notification, Loading } from 'element-ui';
-import { ElLoadingComponent } from 'element-ui/types/loading';
 import { ResultVM, ResultCode } from '@/view-models/result.vm'
 
 import store from '@/store';
@@ -48,24 +46,14 @@ export const createAxiosInstance = () => {
     }
 
     if (!success && !ignoreErrorMessage) {
-      Notification.error({
-        title: 'Oops',
-        message: resultMessage,
-        dangerouslyUseHTMLString: true,
-        duration: 5000,
-      });
+      alert(resultMessage)
     }
 
     return response;
   }, (err) => {
     console.error(err);
     store.dispatch('updateLoading', false);
-    Notification.error({
-      title: 'Oops',
-      message: err.message,
-      dangerouslyUseHTMLString: true,
-      duration: 5000,
-    });
+    alert(err.message)
   })
 
   async function request<T>(config: AxiosRequestConfig): Promise<T> {
@@ -78,8 +66,47 @@ export const createAxiosInstance = () => {
     })
   }
 
+  async function get<T = ResultVM>(url: string, config?: CustomAxiosRequestConfig): Promise<T> {
+    return request<T>({
+      method: 'GET',
+      url,
+      ...config
+    })
+  }
+
+  async function post<T = ResultVM>(url: string, data?: any, config?: CustomAxiosRequestConfig): Promise<T> {
+    return request<T>({
+      method: 'POST',
+      url,
+      data,
+      ...config
+    })
+  }
+
+  async function put<T = ResultVM>(url: string, data?: any, config?: CustomAxiosRequestConfig): Promise<T> {
+    return request<T>({
+      method: 'PUT',
+      url,
+      data,
+      ...config
+    })
+  }
+
+  async function del<T = ResultVM>(url: string, config?: CustomAxiosRequestConfig): Promise<T> {
+    return request<T>({
+      method: 'DELETE',
+      url,
+      ...config
+    })
+  }
+
   return {
-    request
+    request,
+    get,
+    post,
+    put,
+    delete: del,
+    interceptors: axiosInstace.interceptors
   }
 }
 

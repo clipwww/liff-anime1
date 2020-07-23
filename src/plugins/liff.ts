@@ -1,5 +1,3 @@
-import { Notification } from 'element-ui';
-
 import { LiffError } from '@/view-models/liff.vm';
 
 const liff = window.liff;
@@ -8,10 +6,6 @@ export const installLIFF = async () => {
   console.log(liff, liffId);
 
   if (!liffId) {
-    Notification({
-      title: 'Oops',
-      message: '缺少Liff Id，請檢查.env',
-    })
     return;
   }
 
@@ -20,21 +14,14 @@ export const installLIFF = async () => {
       liffId,
     })
   } catch (err) {
-    Notification({
-      title: 'Oops',
-      message: (err as LiffError).message
-    })
+    console.log((err as LiffError).message)
   }
 
   console.log(liff.getVersion())
 }
 
 export const sendAlertIfNotInClient = () => {
-  Notification({
-    type: 'error',
-    title: '這個功能只能在Line裡面使用！',
-    message: ''
-  });
+  alert('這個功能只能在Line裡面使用！')
 }
 
 export const scanCode = async () => {
@@ -44,11 +31,7 @@ export const scanCode = async () => {
   }
 
   if (!liff.scanCode) {
-    Notification({
-      type: 'error',
-      title: '您的裝置不支援LIFF掃描功能！',
-      message: ''
-    });
+    alert('您的裝置不支援LIFF掃描功能！')
     return;
   }
 
@@ -57,11 +40,7 @@ export const scanCode = async () => {
     const ret = await liff.scanCode();
     return ret;
   } catch (err) {
-    Notification({
-      type: 'error',
-      title: err.message,
-      message: ''
-    });
+    alert(err.message)
     return;
   }
 }

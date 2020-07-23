@@ -1,74 +1,42 @@
-import Vue from 'vue'
-import VueRouter, { RouteConfig } from 'vue-router'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
-import Home from '../views/Home.vue'
+// import Home from '../views/Home.vue'
 
 import { loadComponents } from './utils';
 
-Vue.use(VueRouter)
-
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
+  // {
+  //   path: '/',
+  //   name: 'Home',
+  //   component: Home,
+  //   meta: {
+  //     label: '入口'
+  //   }
+  // },
   {
-    path: '/',
-    name: 'Home',
-    component: Home,
+    path: '/agefans',
+    name: 'Agefans',
+    component: loadComponents('Agefans/List'),
     meta: {
-      label: 'Anime1 動畫列表'
+      label: 'AGE動漫'
     }
   },
   {
-    path: '/bangumi/:id',
-    name: 'Bangumi',
-    component: loadComponents('Bangumi'),
-  },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: loadComponents('Admin/Layout'),
-    redirect: { name: 'AdminDashboard' },
+    path: '/agefans/:id',
+    name: 'AgefansDetails',
+    component: loadComponents('Agefans/Details'),
     meta: {
-      auth: true,
-      label: '後台'
-    },
-    children: [
-      {
-        path: '',
-        name: 'AdminDashboard',
-        component: loadComponents('Admin/Dashboard'),
-        meta: {
-          auth: true,
-          label: 'Dashboard'
-        }
-      },
-      {
-        path: 'user',
-        name: 'AdminUser',
-        component: loadComponents('Admin/User'),
-        meta: {
-          auth: true,
-          label: '使用者'
-        }
-      },
-      {
-        path: 'bangumi',
-        name: 'AdminBangumi',
-        component: loadComponents('Admin/Bangumi'),
-        meta: {
-          auth: true,
-          label: '暫存資料'
-        }
-      }
-    ]
+      label: 'AGE動漫'
+    }
   },
   {
-    path: '*',
-    redirect: '/'
+    path: '',
+    redirect: '/agefans'
   },
 ]
 
-const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 

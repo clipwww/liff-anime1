@@ -1,12 +1,9 @@
 @charset "UTF-8";
 
-@import 'default';
 @import 'variables';
 @import 'mixin';
 
-@import './components/element-ui';
 @import './components/loader';
-@import './components/intro';
 
 @import 'tool';
 @import 'transition';
