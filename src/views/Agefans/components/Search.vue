@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="w-full max-w-sm">
+    <div class="w-full">
       <div class="flex items-center border-b border-b-2 border-teal-500">
         <input
           class="appearance-none bg-transparent border-none w-full text-gray-100 mr-3 px-2 text-xl leading-tight focus:outline-none"

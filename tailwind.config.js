@@ -6,7 +6,7 @@ module.exports = {
   theme: {
     extend: {
       screens: {
-        light: { raw: "(prefers-color-scheme: light)" },
+        // light: { raw: "(prefers-color-scheme: light)" },
         dark: { raw: '(prefers-color-scheme: dark)' },
         // => @media (prefers-color-scheme: dark) { ... }
       },
@@ -20,15 +20,9 @@ module.exports = {
     function ({ addBase, config }) {
       addBase({
         body: {
-          color: config("theme.colors.black"),
-          backgroundColor: config("theme.colors.white")
+          color: config("theme.colors.white"),
+          backgroundColor: config("theme.colors.black")
         },
-        "@screen dark": {
-          body: {
-            color: config("theme.colors.white"),
-            backgroundColor: config("theme.colors.black")
-          }
-        }
       });
     }
   ],

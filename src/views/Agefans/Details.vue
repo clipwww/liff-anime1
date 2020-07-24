@@ -2,10 +2,13 @@
   <div>
     <div class="loader loader-border" :class="{ 'is-active': isLoading }"></div>
     <div v-if="item" class="pb-10">
-      <div class="flex mb-2">
+      <div class="flex items-start mb-2">
         <img class="w-1/3" :src="item.imgUrl" />
         <div class="px-4">
-          <div class="font-bold text-xl">{{ item.title }}</div>
+          <div class="font-bold text-xl">
+            {{ item.title }}
+            <span class="ml-1 text-xs text-gray-500">[{{ item.status }}]</span>
+          </div>
           <div class="mb-1 text-xs">{{ item.originName }}</div>
           <div class="mb-1 text-xs">地區: {{ item.area }}</div>
           <div class="mb-1 text-xs">製作公司: {{ item.studio }}</div>

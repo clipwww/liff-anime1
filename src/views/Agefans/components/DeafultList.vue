@@ -26,7 +26,9 @@
               {{ item.name }}
             </div>
             <div class="text-xs text-gray-500">{{ item.namefornew }}</div>
-            <div class="text-xs text-gray-300">{{ item.mtime }}</div>
+            <div
+              class="text-xs text-gray-300 transform scale-75 origin-left"
+            >最後更新日期: {{ item.mtime }}</div>
           </td>
           <td class="w-1/5 border-b text-center">
             <router-link
@@ -74,7 +76,7 @@ export default {
       animeList.value
         .filter(item => item.wd === activeWeek.value)
         .sort((a, b) => {
-          return isBefore(new Date(a.mtime), new Date(b.mtime)) ? 1 : -1;
+          return isBefore(new Date(a.mtime.replace(/-/g, '/')), new Date(b.mtime.replace(/-/g, '/'))) ? 1 : -1;
         })
     );
     const isLoading = computed(() => store.state.isLoading);
