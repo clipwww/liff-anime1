@@ -1,18 +1,18 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-
-// import Home from '../views/Home.vue'
+// @ts-ignore
+import Home from '../views/Home.vue'
 
 import { loadComponents } from './utils';
 
 const routes: RouteRecordRaw[] = [
-  // {
-  //   path: '/',
-  //   name: 'Home',
-  //   component: Home,
-  //   meta: {
-  //     label: '入口'
-  //   }
-  // },
+  {
+    path: '/',
+    name: 'Home',
+    component: Home,
+    meta: {
+      label: '入口'
+    }
+  },
   {
     path: '/agefans',
     name: 'Agefans',
@@ -30,8 +30,12 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
-    path: '',
-    redirect: '/agefans'
+    path: '/url-share',
+    name: 'UrlShare',
+    component: loadComponents('UrlShare', true),
+    meta: {
+      label: '分享連結'
+    }
   },
 ]
 

@@ -1,9 +1,7 @@
-import { LiffError } from '@/view-models/liff.vm';
+import liff from '@line/liff';
 
-const liff = window.liff;
 export const installLIFF = async () => {
   const liffId = process.env.VUE_APP_LIFF_ID as string;
-  console.log(liff, liffId);
 
   if (!liffId) {
     return;
@@ -14,7 +12,7 @@ export const installLIFF = async () => {
       liffId,
     })
   } catch (err) {
-    console.log((err as LiffError).message)
+    console.log((err as Error).message)
   }
 
   console.log(liff.getVersion())

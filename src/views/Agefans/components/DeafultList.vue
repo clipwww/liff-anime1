@@ -53,9 +53,6 @@ import { agefansSVC } from '@/services';
 
 export default {
   setup() {
-    const mode = ref('list');
-    const activeTab = 'bg-blue-800  border-blue-800 text-white';
-    const inactiveTab = 'border-gray-200 text-blue-800 bg-gray-200';
     const animeList = ref([]);
     const weekDays = Array(7)
       .fill('')
@@ -74,7 +71,7 @@ export default {
     const activeWeek = ref(new Date().getDay());
     const filterAnimeList = computed(() =>
       animeList.value
-        .filter(item => item.wd === activeWeek.value)
+        .filter((item) => item.wd === activeWeek.value)
         .sort((a, b) => {
           return isBefore(new Date(a.mtime.replace(/-/g, '/')), new Date(b.mtime.replace(/-/g, '/'))) ? 1 : -1;
         })
@@ -91,9 +88,6 @@ export default {
 
     getAnimeList();
     return {
-      mode,
-      activeTab,
-      inactiveTab,
       weekDays,
       activeWeek,
       animeList: filterAnimeList,

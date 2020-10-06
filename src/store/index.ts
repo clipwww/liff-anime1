@@ -1,4 +1,5 @@
 import { createStore } from 'vuex'
+import liff from '@line/liff';
 
 // import { liffAni1Ref } from '@/plugins/firebase';
 import { LineProfile } from '@/view-models/liff.vm';
@@ -32,13 +33,13 @@ export default createStore<RootState>({
       commit('UPDATE_LOADING', bool);
     },
     updateLoggedIn({ commit }) {
-      commit('UPDATE_LOGGED_IN', window.liff.isLoggedIn());
+      commit('UPDATE_LOGGED_IN', liff.isLoggedIn());
     },
     async updateProfile({ commit, state }) {
       if (!state.isLoggedIn) {
         return;
       }
-      const profile = await window.liff.getProfile();
+      const profile = await liff.getProfile();
 
       // const snapshot = await liffAni1Ref.child(`user-${ret.userId}`).once('value')
       // const profile = snapshot.val();
@@ -46,8 +47,8 @@ export default createStore<RootState>({
       //   ...ret,
       //   ...profile,
       //   deviceInfo: {
-      //     os: window.liff.getOS(),
-      //     lang: window.liff.getLanguage(),
+      //     os: liff.getOS(),
+      //     lang: liff.getLanguage(),
       //     userAgent: window.navigator.userAgent
       //   },
       //   dateUpdated: +new Date()
@@ -59,7 +60,7 @@ export default createStore<RootState>({
   },
   getters: {
     isLoading: state => state.isLoading,
-    isLoggedIn: state => state.isLoggedIn && window.liff.isLoggedIn(),
+    isLoggedIn: state => state.isLoggedIn && liff.isLoggedIn(),
     profile: state => state.profile || {
       pictureUrl: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
     },

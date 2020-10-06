@@ -22,7 +22,7 @@ export interface ResultListGenericVM<T> extends ResultVM {
   page?: {
     index: number;
     size: number;
-    dataAmount: number;
+    amount: number;
     pageAmount: number;
   }
 }
