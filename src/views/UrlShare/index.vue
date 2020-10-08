@@ -98,7 +98,7 @@ export default {
                 },
                 {
                   type: 'text',
-                  text: description.length > 100 ? `${description.slice(0, 100)}...` : description,
+                  text: description ? (description.length > 100 ? `${description.slice(0, 100)}...` : description) : '',
                   wrap: true,
                   size: 'xs',
                   margin: 'md',
