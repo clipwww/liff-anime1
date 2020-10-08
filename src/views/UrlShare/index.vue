@@ -131,7 +131,7 @@ export default {
 
         isLoading.value = true;
 
-        await liff.shareTargetPicker([flexMsg.value]);
+        await liff.shareTargetPicker([JSON.parse(flexMsg.value)]);
       } catch (err) {
         alert(err);
       } finally {
