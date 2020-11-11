@@ -59,7 +59,7 @@ export default defineComponent({
     });
 
     async function getMovieRecord() {
-      const ret = await axiosInstace.get('http://mechakucha-api.herokuapp.com/my-movie-record');
+      const ret = await axiosInstace.get('https://mechakucha-api.herokuapp.com/my-movie-record');
       if (!ret.success) {
         return;
       }
