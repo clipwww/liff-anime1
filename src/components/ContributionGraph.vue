@@ -156,8 +156,8 @@ export default defineComponent({
             <div class="text-left">
               ${dayjs(d.date).format('YYYY/MM/DD (ddd)')}<br/>
               ${list
-                .reverse()
                 .map((item) => `${dayjs(item.date).format('HH:mm')} ${item.title}`)
+                .reverse()
                 .join('<br/>')}
             </div>
           `;
