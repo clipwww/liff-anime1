@@ -37,6 +37,14 @@ const routes: RouteRecordRaw[] = [
       label: '分享連結'
     }
   },
+  {
+    path: '/movie-record',
+    name: 'MovieRecord',
+    component: loadComponents('MovieRecord', true),
+    meta: {
+      label: '電影紀錄'
+    }
+  },
 ]
 
 const router = createRouter({
