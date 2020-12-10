@@ -1,73 +1,87 @@
 <template>
-  <div>
-    <div class="w-full">
-      <div class="flex items-center border-b border-b-2 border-teal-500">
-        <input
-          class="appearance-none bg-transparent border-none w-full text-gray-100 mr-3 px-2 text-xl leading-tight focus:outline-none"
-          type="text"
-          placeholder="請輸入關鍵字"
-          v-model.trim="keyword"
-          @keyup.enter="searchAnime"
-        />
-        <button
-          class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 py-1 px-2 rounded"
-          type="button"
-          @click="searchAnime"
-        >搜尋</button>
-      </div>
-    </div>
 
-    <div v-show="isLoading">Loading...</div>
-    <div v-show="!isLoading">
-      <router-link
-        v-for="item in animeList"
-        :key="item.id"
-        :to="{ name: 'AgefansDetails', params: { id: item.id } }"
-        class="flex items-start my-2 p-2 border-b"
-      >
-        <img class="w-1/4" :src="item.imgUrl" alt />
-        <div class="px-2">
-          <div class="font-bold text-base">{{ item.title }}</div>
-          <div class="mb-1 text-xs">{{ item.originName }}</div>
-          <div class="mb-1 text-xs">類型: {{ item.type }}</div>
-          <div class="mb-1 text-xs">放送日: {{ item.dateAired }}</div>
-        </div>
-      </router-link>
-    </div>
-  </div>
+  <PullRefresh class="mt-2" v-model="refreshing" @refresh="fetchData">
+    <VanSearch
+      v-model="keyword"
+      show-action
+      placeholder="請輸入關鍵字"
+      @search="fetchData"
+    >
+      <template #action>
+        <Button type="primary" @click="fetchData">搜索</Button>
+      </template>
+    </VanSearch>
+    <template v-if="loading">
+      <Cell class="py-2" v-for="n in 10" :key="n">
+        <Skeleton class="p-0" :row="2"></Skeleton>
+      </Cell>
+    </template>
+    <Cell v-else v-for="item in list"
+      :key="item.id"
+      :title="item.title"
+      size="large"
+      is-link
+      center
+      :to="{ name: 'AgefansDetails', params: { id: item.id } }">
+      <template #icon>
+        <Image :src="item.imgUrl" class="w-16 mr-2" />
+      </template>
+      <template #label>
+        <div>{{ item.originName }}</div>
+        <div class="text-xs text-gray-500 my-1">類型: {{ item.type }}</div>
+        <div class="text-xs text-gray-500">放送日: {{ item.dateAired }}</div>
+      </template>
+
+    </Cell>
+
+  </PullRefresh>
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, toRefs, reactive } from 'vue';
+import { Search, Button, Cell, PullRefresh, Skeleton, Image } from 'vant';
 
 import store from '@/store';
 import { agefansSVC } from '@/services';
 
 export default {
+  components: {
+    VanSearch: Search,
+    Button,
+    Cell,
+    PullRefresh,
+    Skeleton,
+    Image
+  },
   setup() {
-    const keyword = ref('');
-    const animeList = ref([]);
-    const isLoading = ref(false);
+    const state = reactive({
+      keyword: '',
+      list: [],
+      refreshing: false,
+      loading: false,
+    })
 
-    async function searchAnime() {
-      if (!keyword) return;
+    async function fetchData() {
+      if (!state.keyword) return;
 
-      isLoading.value = true;
-      const ret = await agefansSVC.getList(keyword.value);
-      isLoading.value = false;
+      state.refreshing = false;
+      state.loading = true;
+
+      const ret = await agefansSVC.getList(state.keyword);
+
+      state.loading = false;
       if (!ret.success) {
         return;
       }
 
-      animeList.value = ret.items;
+      state.list = ret.items;
     }
 
-    return {
-      keyword,
-      animeList,
-      isLoading,
 
-      searchAnime,
+    return {
+      ...toRefs(state),
+
+      fetchData,
     };
   },
 };

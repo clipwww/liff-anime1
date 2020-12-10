@@ -3,17 +3,21 @@ module.exports = {
     removeDeprecatedGapUtilities: true,
     purgeLayersByDefault: true,
   },
-  purge: [
-    './src/**/*.html',
-    './src/**/*.vue',
-  ],
+  purge: {
+    enabled: process.env.NODE_ENV === 'production',
+    layers: ['components', 'utilities'],
+    content: [
+      './src/**/*.html',
+      './src/**/*.vue',
+    ]
+  },
   theme: {
     extend: {
-      screens: {
-        // light: { raw: "(prefers-color-scheme: light)" },
-        dark: { raw: '(prefers-color-scheme: dark)' },
-        // => @media (prefers-color-scheme: dark) { ... }
-      },
+      // screens: {
+      //   // light: { raw: "(prefers-color-scheme: light)" },
+      //   dark: { raw: '(prefers-color-scheme: dark)' },
+      //   // => @media (prefers-color-scheme: dark) { ... }
+      // },
       lineHeight: {
         '0': 0
       }
@@ -21,13 +25,13 @@ module.exports = {
   },
   variants: {},
   plugins: [
-    function ({ addBase, config }) {
-      addBase({
-        body: {
-          color: config("theme.colors.white"),
-          backgroundColor: config("theme.colors.black")
-        },
-      });
-    }
+    // function ({ addBase, config }) {
+    //   addBase({
+    //     body: {
+    //       color: config("theme.colors.white"),
+    //       backgroundColor: config("theme.colors.black")
+    //     },
+    //   });
+    // }
   ],
 }

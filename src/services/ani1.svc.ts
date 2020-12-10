@@ -1,27 +1,29 @@
-// 
+//
 import { axiosInstace } from './base.svc';
 
-import { ResultListGenericVM } from '@/view-models/result.vm';
+import { ResultVM, ResultListGenericVM } from '@/view-models/result.vm';
 
-const baseURL = 'https://clipwww-nuxt-express-project.herokuapp.com/api/anime1';
+interface BangumiResultVM extends ResultVM {
+  item: {
+    id: string;
+    title: string;
+  }
+  items: { id: string, name: string }[];
+}
+
+const baseURL = '/anime1';
 
 
 /**
  * [GET] 取得動畫列表
  */
 export async function getList() {
-  return axiosInstace.request<ResultListGenericVM<{ id: string, name: string }>>({
-    method: 'GET',
-    url: `${baseURL}/list`,
-  })
+  return axiosInstace.get<ResultListGenericVM<{ id: string, name: string }>>(baseURL)
 }
 
 /**
  * [GET] 取得動畫
  */
 export async function getBangumi(id: string) {
-  return axiosInstace.request<ResultListGenericVM<{ id: string, name: string }>>({
-    method: 'GET',
-    url: `${baseURL}/bangumi/${id}`,
-  })
+  return axiosInstace.get<BangumiResultVM>(`${baseURL}/${id}`)
 }

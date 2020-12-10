@@ -16,6 +16,7 @@ export interface CustomAxiosResponse extends AxiosResponse {
 export const createAxiosInstance = () => {
   console.log('createAxiosInstance')
   const axiosInstace = axios.create({
+    baseURL: 'https://mechakucha-api.herokuapp.com',
     timeout: 60000,
     headers: {
       'Content-Type': 'application/json',

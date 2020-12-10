@@ -1,101 +1,94 @@
 <template>
-  <div>
-    <div class="relative w-full mb-5">
-      <select
-        v-model="activeWeek"
-        class="block appearance-none w-full text-black bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline"
-      >
-        <option v-for="item in weekDays" :key="item.id" :value="item.value">{{ item.label }}</option>
-      </select>
-      <div
-        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-      >
-        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-        </svg>
-      </div>
-    </div>
+  <PullRefresh class="mt-2 pb-12" v-model="refreshing" @refresh="fetchData">
+    <template v-if="loading">
+      <Cell class="py-2" v-for="n in 10" :key="n">
+        <Skeleton class="p-0" :row="2"></Skeleton>
+      </Cell>
+    </template>
+    <Cell v-else v-for="item in filterList"
+      :key="item.id"
+      :title="item.name"
+      size="large"
+      is-link
+      center
+      :to="{ name: 'AgefansDetails', params: { id: item.id } }">
+      <template #label>
+        <div>{{ item.namefornew }}</div>
+        <div class="text-xs text-gray-500 transform scale-75 origin-left">最後更新日期: {{ item.mtime }}</div>
+      </template>
 
-    <div v-show="isLoading">Loading...</div>
-    <table v-show="!isLoading" class="table-fixed border-collapse border-1 border-gray-500 w-full">
-      <tbody>
-        <tr v-for="item in animeList" :key="item.id">
-          <td class="border-b p-2">
-            <div>
-              <span v-if="item.isnew" class="text-red-600">*</span>
-              {{ item.name }}
-            </div>
-            <div class="text-xs text-gray-500">{{ item.namefornew }}</div>
-            <div
-              class="text-xs text-gray-300 transform scale-75 origin-left"
-            >最後更新日期: {{ item.mtime }}</div>
-          </td>
-          <td class="w-1/5 border-b text-center">
-            <router-link
-              tag="button"
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-xs"
-              :to="{ name: 'AgefansDetails', params: { id: item.id } }"
-            >詳細</router-link>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    </Cell>
+
+    <Tabbar v-model="activeWeek" fixed border safe-area-inset-bottom	>
+      <TabbarItem v-for="item in weekdays" :key="item.value" :name="item.value">{{ item.label }}</TabbarItem>
+    </Tabbar>
+  </PullRefresh>
 </template>
 
-<script>
-import { ref, computed } from 'vue';
-import { format, startOfWeek, addDays, isBefore } from 'date-fns';
-import { zhTW } from 'date-fns/locale';
+<script lang="ts">
+import { computed, defineComponent, reactive, toRefs } from 'vue';
+import { PullRefresh, Cell, Skeleton, Tabbar, TabbarItem } from 'vant';
+import dayjs from 'dayjs';
 
-import store from '@/store';
-import { agefansSVC } from '@/services';
+import { agefansSVC } from '@/services'
 
-export default {
+export default defineComponent({
+  components: {
+    PullRefresh,
+    Cell,
+    Skeleton,
+    Tabbar,
+    TabbarItem
+  },
   setup() {
-    const animeList = ref([]);
-    const weekDays = Array(7)
+    const weekdays = Array(7)
       .fill('')
-      .map((s, i) => {
-        const id = (i + 1) % 7;
-        const date = addDays(startOfWeek(new Date(), { weekStartsOn: 1 }), i);
-        return {
-          id,
-          value: id,
-          date,
-          label: format(date, 'E', {
-            locale: zhTW,
-          }),
-        };
-      });
-    const activeWeek = ref(new Date().getDay());
-    const filterAnimeList = computed(() =>
-      animeList.value
-        .filter((item) => item.wd === activeWeek.value)
-        .sort((a, b) => {
-          return isBefore(new Date(a.mtime.replace(/-/g, '/')), new Date(b.mtime.replace(/-/g, '/'))) ? 1 : -1;
-        })
-    );
-    const isLoading = computed(() => store.state.isLoading);
+      .map((_, i) => {
+       return {
+          value:  (i + 1) % 7,
+          label: dayjs().weekday(i).format('ddd')
+        }
+      })
 
-    async function getAnimeList() {
+
+    const state = reactive({
+      list: [],
+      activeWeek: new Date().getDay(),
+      filterList: computed(() => state.list.filter((item) => item.wd === state.activeWeek)
+        .sort((a, b) => {
+          return dayjs(new Date(a.mtime.replace(/-/g, '/'))).isBefore(new Date(b.mtime.replace(/-/g, '/'))) ? 1 : -1;
+        })),
+      refreshing: false,
+      loading: true,
+    })
+
+    async function fetchData() {
+      state.refreshing = false;
+      state.loading = true;
+
       const ret = await agefansSVC.getList();
+
+       state.loading = false;
       if (!ret.success) {
         return;
       }
-      animeList.value = ret.items;
+
+      state.list = ret.items;
+
     }
 
-    getAnimeList();
+    fetchData();
+
     return {
-      weekDays,
-      activeWeek,
-      animeList: filterAnimeList,
-      isLoading,
-    };
-  },
-};
+      ...toRefs(state),
+      weekdays,
+
+      fetchData,
+    }
+  }
+})
 </script>
 
 <style lang="scss" scoped>
+
 </style>

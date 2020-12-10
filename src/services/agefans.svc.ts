@@ -2,7 +2,7 @@ import { axiosInstace } from './base.svc';
 
 import { ResultListGenericVM, ResultGenericVM } from '@/view-models/result.vm';
 
-const baseURL = 'https://mechakucha-api.herokuapp.com/agefans';
+const baseURL = '/agefans';
 
 
 /**
