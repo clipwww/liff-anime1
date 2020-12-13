@@ -1,7 +1,7 @@
 import liff from '@line/liff';
 
 export const installLIFF = async () => {
-  const liffId = process.env.VUE_APP_LIFF_ID as string;
+  const liffId = '1557984400-kyGZywOP';
 
   if (!liffId) {
     return;
