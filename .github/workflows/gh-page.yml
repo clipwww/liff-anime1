@@ -16,9 +16,8 @@ jobs:
           ref: master
 
       - name: set env
-        uses: allenevans/set-env@v1.1.0
-        with:
-          VUE_APP_LIFF_ID: ${{ secrets.VUE_APP_LIFF_ID }}
+        run:
+          - echo "VUE_APP_LIFF_ID=${secrets.VUE_APP_LIFF_ID}" >> $GITHUB_ENV`
 
       - name: setup node
         uses: actions/setup-node@v1
