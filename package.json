@@ -19,7 +19,7 @@
     "intro.js": "^2.9.3",
     "lodash": "^4.17.20",
     "tailwindcss": "^1.9.6",
-    "vant": "^3.0.0-rc.2",
+    "vant": "^3.0.1",
     "vue": "^3.0.4",
     "vue-analytics": "^5.22.1",
     "vue-meta": "^2.4.0",

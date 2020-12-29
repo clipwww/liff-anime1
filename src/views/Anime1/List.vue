@@ -6,16 +6,17 @@
       </Cell>
     </template>
 
-
-    <Cell v-else v-for="item in filterList"
+    <Cell
+      v-else
+      v-for="item in filterList"
       :key="item.id"
       :title="item.name"
       :label="item.description"
       size="large"
       center
       is-link
-      :to="{ name: 'Anime1Details', params: { id: item.id } }" />
-
+      :to="{ name: 'Anime1Details', params: { id: item.id } }"
+    />
   </PullRefresh>
 </template>
 
@@ -23,7 +24,7 @@
 import { defineComponent, reactive, toRefs, Ref, inject, computed } from 'vue';
 import { PullRefresh, Cell, Skeleton } from 'vant';
 
-import { ani1SVC } from '@/services'
+import { ani1SVC } from '@/services';
 import { keywordSymbol } from '@/provide';
 
 export default defineComponent({
@@ -37,11 +38,12 @@ export default defineComponent({
 
     const state = reactive({
       list: [],
-      filterList: computed(() => state.list.filter(item => keyword.value ? item.name.includes(keyword.value) : true)),
+      filterList: computed(() =>
+        state.list.filter((item) => (keyword.value ? item.name.includes(keyword.value) : true))
+      ),
       refreshing: false,
       loading: true,
-    })
-
+    });
 
     async function fetchData() {
       state.refreshing = false;
@@ -55,7 +57,6 @@ export default defineComponent({
       }
 
       state.list = ret.items;
-
     }
 
     fetchData();
@@ -65,13 +66,10 @@ export default defineComponent({
       keyword,
 
       fetchData,
-    }
-  }
-})
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
-
 </style>
-
-v
