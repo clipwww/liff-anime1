@@ -1,45 +1,57 @@
 <template>
   <div>
-    <div class="loader loader-border" :class="{ 'is-active': isLoading }"></div>
     <template v-if="isLoggedIn">
-      <input class="w-full rounded text-xl p-2 text-black" type="text" v-model="url" placeholder="請輸入網址" />
-      <button
-        class="w-full text-center block border border-white rounded py-3 px-4 my-4"
-        :disabled="isLoading"
-        @click="shareTargetPickerWithFetch"
-      >
-        分享
-      </button>
+      <Field v-model="url" label="網址" label-width="50px" placeholder="請輸入網址" />
 
-      <textarea class="w-full resize-y border rounded p-2 text-black mt-4" v-model="flexMsg" rows="10"></textarea>
-      <button
-        class="w-full text-center block border border-white rounded py-3 px-4 my-4"
-        :disabled="isLoading"
-        @click="shareTargetPicker"
-      >
-        分享
-      </button>
+      <div class="p-2">
+        <Button type="primary" :disabled="isLoading" block @click="shareTargetPickerWithFetch">分享</Button>
+      </div>
+
+      <Divider />
+
+      <Field type="textarea" v-model="flexMsg" rows="10" />
+      <div class="p-2">
+        <Button type="primary" :disabled="isLoading" block @click="shareTargetPicker">分享</Button>
+      </div>
     </template>
 
-    <button v-else class="w-full text-center block border border-white rounded py-3 px-4 my-4" @click="login">
-      登入
-    </button>
+    <div v-else class="p-2">
+      <Button type="success" class="my-4" block @click="login">登入</Button>
+    </div>
   </div>
 </template>
 
 <script>
 import liff from '@line/liff';
-import { ref } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
+import { Button, Field, Divider, Toast } from 'vant';
 
 import { axiosInstace, baseURL } from '@/services/base.svc';
 import { loadFile } from '@/utils/image.util';
+import router from '@/router';
 
-export default {
+export default defineComponent({
+  components: {
+    Button,
+    Field,
+    Divider,
+  },
   setup() {
     const isLoggedIn = liff.isLoggedIn();
-    const url = ref('');
+    const url = ref(router.currentRoute.value.query.url || '');
     const isLoading = ref(false);
     const flexMsg = ref('');
+
+    watch(isLoading, (bool) => {
+      if (bool) {
+        Toast.loading({
+          message: '抓取資料中...',
+          duration: 0,
+        });
+      } else {
+        Toast.clear();
+      }
+    });
 
     function login() {
       liff.login({
@@ -54,6 +66,7 @@ export default {
         }
 
         isLoading.value = true;
+
         const ret = await axiosInstace.get(`${baseURL}/meta-fetcher`, {
           params: {
             url: url.value,
@@ -150,7 +163,7 @@ export default {
       shareTargetPicker,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

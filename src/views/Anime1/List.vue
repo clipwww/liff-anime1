@@ -1,5 +1,9 @@
 <template>
   <PullRefresh v-model="refreshing" @refresh="fetchData">
+    <Sticky>
+      <VanSearch v-model="keyword" placeholder="請輸入關鍵字"></VanSearch>
+    </Sticky>
+
     <template v-if="loading">
       <Cell class="py-2" v-for="n in 10" :key="n">
         <Skeleton class="p-0" :row="2"></Skeleton>
@@ -21,20 +25,23 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, Ref, inject, computed } from 'vue';
-import { PullRefresh, Cell, Skeleton } from 'vant';
+import { defineComponent, reactive, toRefs, Ref, ref, inject, computed } from 'vue';
+import { PullRefresh, Cell, Skeleton, Search, Button, Sticky } from 'vant';
 
 import { ani1SVC } from '@/services';
-import { keywordSymbol } from '@/provide';
 
 export default defineComponent({
+  name: 'Anime1List',
   components: {
     PullRefresh,
     Cell,
     Skeleton,
+    VanSearch: Search,
+    Button,
+    Sticky,
   },
   setup() {
-    const keyword: Ref<string> = inject(keywordSymbol);
+    const keyword = ref('');
 
     const state = reactive({
       list: [],

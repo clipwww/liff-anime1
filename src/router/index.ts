@@ -47,6 +47,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/himawari',
+    name: 'Himawari',
+    component: loadComponents('Himawari', true),
+    meta: {
+      label: '向日葵動畫'
+    }
+  },
+  {
     path: '/url-share',
     name: 'UrlShare',
     component: loadComponents('UrlShare', true),
