@@ -10,8 +10,26 @@
         <Tag class="mr-2" type="primary" plain>{{ item.type }}</Tag>
       </template>
       <template #right-icon>
-        <Icon class="mr-2" name="live" size="22" @click="openOriginPage(item)" />
-        <Icon name="play" size="22" @click="openMp4(item)" />
+        <Icon class="mr-3" name="live" size="22" @click="openOriginPage(item)" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          aria-hidden="true"
+          focusable="false"
+          role="img"
+          class="iconify iconify--mdi"
+          width="1.5em"
+          height="1.5em"
+          preserveAspectRatio="xMidYMid meet"
+          viewBox="0 0 24 24"
+          style="transform: rotate(360deg)"
+          @click="downloadMp4(item)"
+        >
+          <path
+            d="M14 2l6 6v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8m4 18V9h-5V4H6v16h12m-6-1l-4-4h2.5v-3h3v3H16l-4 4z"
+            fill="currentColor"
+          ></path>
+        </svg>
       </template>
       <!-- <iframe :src="item.iframeSrc" class="hidden"></iframe> -->
     </Cell>
@@ -24,7 +42,7 @@ import { computed, defineComponent, reactive, toRefs, inject, Ref } from 'vue';
 import { PullRefresh, Cell, Skeleton, Icon, Tag } from 'vant';
 
 import router from '@/router';
-import { ani1SVC } from '@/services';
+import { ani1SVC, baseURL } from '@/services';
 import { titleSymbol } from '@/provide';
 
 export default defineComponent({
@@ -58,8 +76,8 @@ export default defineComponent({
       title.value = ret.item.title;
     }
 
-    function openMp4({ id }) {
-      window.open(`https://mechakucha-api.herokuapp.com/anime1/video/${id}/download`, '_blank', 'noreferrer');
+    function downloadMp4({ id }) {
+      window.open(`${baseURL}/anime1/video/${id}/download`, '_blank', 'noreferrer');
     }
 
     function openOriginPage({ id, iframeSrc }) {
@@ -73,7 +91,7 @@ export default defineComponent({
       ...toRefs(state),
 
       fetchData,
-      openMp4,
+      downloadMp4,
       openOriginPage,
     };
   },
@@ -82,5 +100,3 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 </style>
-
-v

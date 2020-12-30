@@ -31,7 +31,7 @@
 import liff from '@line/liff';
 import { ref } from 'vue';
 
-import { axiosInstace } from '@/services/base.svc';
+import { axiosInstace, baseURL } from '@/services/base.svc';
 import { loadFile } from '@/utils/image.util';
 
 export default {
@@ -54,7 +54,7 @@ export default {
         }
 
         isLoading.value = true;
-        const ret = await axiosInstace.get(`https://mechakucha-api.herokuapp.com/meta-fetcher`, {
+        const ret = await axiosInstace.get(`${baseURL}/meta-fetcher`, {
           params: {
             url: url.value,
           },

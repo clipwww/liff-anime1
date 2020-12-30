@@ -1,7 +1,7 @@
 <template>
   <swipe :autoplay="3000" indicator-color="white">
     <swipe-item v-for="n in 5" :key="n">
-      <div class="h-32 w-full bg-gray-400 text-2xl flex items-center justify-center">{{ n }}</div>
+      <img :src="`https://picsum.photos/400/140?_=${n}`" alt="" />
     </swipe-item>
   </swipe>
   <grid class="py-4" :column-num="2" :gutter="16" clickable>

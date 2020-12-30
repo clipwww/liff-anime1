@@ -12,11 +12,13 @@ export interface CustomAxiosResponse extends AxiosResponse {
   config: CustomAxiosRequestConfig
 }
 
+export const baseURL = 'https://mechakucha-api.herokuapp.com';
+
 
 export const createAxiosInstance = () => {
   console.log('createAxiosInstance')
   const axiosInstace = axios.create({
-    baseURL: 'https://mechakucha-api.herokuapp.com',
+    baseURL,
     timeout: 60000,
     headers: {
       'Content-Type': 'application/json',

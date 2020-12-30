@@ -13,7 +13,9 @@
           class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 py-1 px-2 rounded"
           type="button"
           @click="getDanmakuList(true)"
-        >搜尋</button>
+        >
+          搜尋
+        </button>
       </div>
     </div>
 
@@ -29,9 +31,7 @@
           <div class="text-gray-400 text-sm">彈幕量: {{ item.count }}</div>
         </div>
         <div class="text-right ml-2">
-          <a
-            :href="`https://mechakucha-api.herokuapp.com/himawari/${item.group_id}/danmaku?mode=download&group=1`"
-          >
+          <a :href="`${baseURL}/himawari/${item.group_id}/danmaku?mode=download&group=1`">
             <svg
               class="text-3xl"
               xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +40,12 @@
               focusable="false"
               width="1em"
               height="1em"
-              style="vertical-align: -0.125em;-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+              style="
+                vertical-align: -0.125em;
+                -ms-transform: rotate(360deg);
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+              "
               preserveAspectRatio="xMidYMid meet"
               viewBox="0 0 24 24"
             >
@@ -61,7 +66,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, Ref, onMounted } from 'vue';
 
-// import { himawariSVC } from '@/services';
+import { baseURL } from '@/services';
 
 export default defineComponent({
   setup() {
@@ -115,6 +120,8 @@ export default defineComponent({
     });
 
     return {
+      baseURL,
+
       keyword,
       danmakuList,
       isLoading,
