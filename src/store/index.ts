@@ -3,6 +3,7 @@ import liff from '@line/liff';
 
 // import { liffAni1Ref } from '@/plugins/firebase';
 import { LineProfile } from '@/view-models/liff.vm';
+import { liffAni1Ref } from '@/plugins/firebase';
 
 export interface RootState {
   isLoading: boolean;
@@ -39,22 +40,22 @@ export default createStore<RootState>({
       if (!state.isLoggedIn) {
         return;
       }
-      const profile = await liff.getProfile();
+      const ret = await liff.getProfile();
 
-      // const snapshot = await liffAni1Ref.child(`user-${ret.userId}`).once('value')
-      // const profile = snapshot.val();
-      // const newProfile = {
-      //   ...ret,
-      //   ...profile,
-      //   deviceInfo: {
-      //     os: liff.getOS(),
-      //     lang: liff.getLanguage(),
-      //     userAgent: window.navigator.userAgent
-      //   },
-      //   dateUpdated: +new Date()
-      // };
+      const snapshot = await liffAni1Ref.child(`user-${ret.userId}`).once('value')
+      const profile = snapshot.val();
+      const newProfile = {
+        ...ret,
+        ...profile,
+        deviceInfo: {
+          os: liff.getOS(),
+          lang: liff.getLanguage(),
+          userAgent: window.navigator.userAgent
+        },
+        dateUpdated: +new Date()
+      };
 
-      // liffAni1Ref.child(`user-${ret.userId}`).set(newProfile);
+      liffAni1Ref.child(`user-${ret.userId}`).set(newProfile);
       commit('UPDATE_PROFILE', profile);
     }
   },

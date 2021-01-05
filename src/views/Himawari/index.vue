@@ -66,7 +66,7 @@ export default defineComponent({
       }
 
       state.loading = true;
-      const ret = await himawariSVC.getList(state.keyword, state.page);
+      const ret = await himawariSVC.getList(state.keyword, state.page, state.keyword ? 'comment_cnt' : 'group_id');
       state.loading = false;
       state.refreshing = false;
 

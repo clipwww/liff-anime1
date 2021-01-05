@@ -17,6 +17,10 @@
       <van-image src="./images/himawari.png" class="w-20 h-20 mb-1" fit="contain" />
       <span class="text-sm">向日葵動畫</span>
     </grid-item>
+    <grid-item :to="{ name: 'NicoNico' }">
+      <van-image src="./images/niconico.png" class="w-20 h-20 mb-1" fit="contain" />
+      <span class="text-sm">NicoNico</span>
+    </grid-item>
     <grid-item :to="{ name: 'UrlShare' }">
       <Icon name="share" size="5rem" class="mb-1" />
       <span class="text-sm">???</span>

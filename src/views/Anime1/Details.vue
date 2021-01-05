@@ -31,6 +31,7 @@
           ></path>
         </svg>
       </template>
+      <!-- <video :src="getMp4Url(item.id)"></video> -->
       <!-- <iframe :src="item.iframeSrc" class="hidden"></iframe> -->
     </Cell>
   </PullRefresh>
@@ -76,8 +77,12 @@ export default defineComponent({
       title.value = ret.item.title;
     }
 
+    function getMp4Url(id) {
+      return `${baseURL}/anime1/video/${id}/download`;
+    }
+
     function downloadMp4({ id }) {
-      window.open(`${baseURL}/anime1/video/${id}/download`, '_blank', 'noreferrer');
+      window.open(getMp4Url(id), '_blank', 'noreferrer');
     }
 
     function openOriginPage({ id, iframeSrc }) {
@@ -91,6 +96,7 @@ export default defineComponent({
       ...toRefs(state),
 
       fetchData,
+      getMp4Url,
       downloadMp4,
       openOriginPage,
     };

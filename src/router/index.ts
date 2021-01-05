@@ -55,6 +55,14 @@ const routes: RouteRecordRaw[] = [
     }
   },
   {
+    path: '/niconico',
+    name: 'NicoNico',
+    component: loadComponents('NicoNico/Ranking'),
+    meta: {
+      label: 'NicoNico 排行榜'
+    }
+  },
+  {
     path: '/url-share',
     name: 'UrlShare',
     component: loadComponents('UrlShare', true),
